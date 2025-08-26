@@ -128,6 +128,42 @@ export def "trmm agents" [
 	}
 }
 
+# TODO: make this import all scripts
+export def "trmm scripts" [
+	--showHiddenScripts = true			# Provide the details?
+]: nothing -> any {
+	let input = $in
+	trmm connect
+	let showHiddenScripts = $showHiddenScripts
+	trmm get "/scripts/" $"showHiddenScripts=($showHiddenScripts)"
+}
+
+export def "trmm-scripts import" [
+	--dest:string = "scripts",
+	--showHiddenScripts = true,			# Provide the details?
+	--with_snippits = false
+]: nothing -> any {
+	use std log
+	let input = $in
+	trmm connect
+	let showHiddenScripts = $showHiddenScripts
+	let scripts = trmm get "/scripts/" $"showHiddenScripts=($showHiddenScripts)"
+
+	# If destination doesnt exist, create it
+	if ( not ($dest | path exists) ) {
+		mkdir $dest
+	}
+
+	# Iterate over all scripts
+	for $script in $scripts {
+		let script_id = $script.id
+		let file = trmm get $"/scripts/($script_id)/download/" $"with_snippits=($with_snippits)"
+		log debug $"[trmm-scripts import] Downloading script: ($file.filename)"
+		let filename = ($file.filename | str replace --all '/' '_' | str replace --all '\\' '_')
+		$file.code | save $"($dest)/($filename)" --force
+	}
+}
+
 # Get all agents and their custom fields.
 export def "trmm agent customfields" []: any -> any {
 	# TRMM connection details are input.
@@ -577,6 +613,8 @@ export def main [
 		}
 		| trmm script run $env.TRMM_AGENT_ID
 
+	} else if $action == 'scripts' {
+		trmm scripts
 	} else if $action == 'winupdate-pending' {
 		trmm agents | trmm winupdate pending | reject description title support_url
 
