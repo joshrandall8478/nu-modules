@@ -160,7 +160,27 @@ export def "trmm-scripts import" [
 		let file = trmm get $"/scripts/($script_id)/download/" $"with_snippits=($with_snippits)"
 		log debug $"[trmm-scripts import] Downloading script: ($file.filename)"
 		let filename = ($file.filename | str replace --all '/' '_' | str replace --all '\\' '_')
+		# Frontmatter check
+		# if ( frontmatter present $file.code ) {
+		# 	$file.code | save $"($dest)/($filename)" --force
+		# }
 		$file.code | save $"($dest)/($filename)" --force
+	}
+}
+
+# Checks if nushell frontmatter exists:
+def "frontmatter present" [ code:string = "" ] : [] {
+
+	try {
+		let frontmatter = ( $code | lines | split list -r '--== Begin frontmatter ==--' |
+		get 1 | split list -r '--== End frontmatter ==--' | get 0 | str replace -a '#' '' | str trim | split list -r '-{2,}' | get 0 )
+		if ($frontmatter | is-empty) {
+			log warning "No frontmatter found"
+			return false
+		}
+		return true
+	} catch {
+		return false
 	}
 }
 

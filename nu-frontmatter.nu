@@ -5,6 +5,20 @@
 
 
 export def main [ file: string ] {
-  open $file | lines | split list -r '--== Begin frontmatter ==--' |
-   | get 1 | split list -r '--== End frontmatter ==--' | get 0 | str replace -a '#' '' | str trim | split list -r '-{2,}' | get 0
+  # let found = split list -r '--== (?<name>.*) ==--'
+  # $found.name
+  # PCRE
+  open $file
+  | lines
+  | split list -r '--== (?i)Begin frontmatter ==--'
+  | get 1
+  | split list -r '--== (?i)End frontmatter ==--'
+  | get 0
+  | str replace --regex '^(#|\/\/) ' ''
+  | to text
+  | from yaml
+  # | save test.yml --force
+  # | str trim
+  # | split list -r '-{2,}'
+  # | get 0
 }

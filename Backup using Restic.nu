@@ -7,19 +7,18 @@
 # ---
 # Name: Backup using Restic
 # Description: File-level backup using Restic and Rclone with Backblaze storage
-# Long Description: -|
-# 	Backup using Restic for backup and rclone to connect to storage backend.
-# 	  - rclone: https://github.com/rclone/rclone
-# 	  - restic: https://github.com/restic/restic
-# 	  - Backblaze: https://www.backblaze.com/docs/cloud-storage-integrate-rclone-with-backblaze-b2
+# Long Description: |-
+#   Backup using Restic for backup and rclone to connect to storage backend.
+#     - rclone: https://github.com/rclone/rclone
+#     - restic: https://github.com/restic/restic
+#     - Backblaze: https://www.backblaze.com/docs/cloud-storage-integrate-rclone-with-backblaze-b2
 # Authors:
-# 	- Joshua Randall (https://github.com/joshrandall8478)
-# 	- NiceGuyIT (https://github.com/NiceGuyIT)
+#   - Joshua Randall (https://github.com/joshrandall8478)
+#   - NiceGuyIT (https://github.com/NiceGuyIT)
 # Version: v0.1.0
 # Hash: TBD
 # Source: https://gitea.n.niceguyit.biz/NiceGuyIT/nu-modules-private/src/branch/main/scripts
 # Documentation: https://d.niceguyit.biz/en/internal/how-to/add-new-company-to-backup
-# ---
 ########################################  --== End frontmatter ==-- ########################################
 
 ########################################  --== Configuration ==-- ########################################
